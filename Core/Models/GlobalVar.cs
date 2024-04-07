@@ -2,6 +2,6 @@
 {
     public static class GlobalVar
     {
-        //public static List<Arquivo> ListArquivo { get; set; } = new();
+        public static List<Arquivo> ListArquivo { get; set; } = new();
     }
 }
