@@ -21,7 +21,9 @@ namespace ApiMyArquivos.Repositorys
             {
                 _db.Database.BeginTransaction();
 
-                if (_db.Arquivos.Any(a => a.Titulo == arquivo.Titulo && a.Id != arquivo.Id))
+                var listArquivos = await _db.Arquivos.ToListAsync();
+
+                if (listArquivos.Count > 0 && listArquivos.Any(a => a.Titulo == arquivo.Titulo && a.Id != arquivo.Id))
                 {
                     arquivo.MensagemRetorno = "Esse título já foi utilizado para outro cadastro.";
                     return arquivo;
@@ -51,7 +53,9 @@ namespace ApiMyArquivos.Repositorys
             {
                 _db.Database.BeginTransaction();
 
-                if (_db.Arquivos.Any(a => a.Titulo == arquivo.Titulo && a.Id != arquivo.Id))
+                var listArquivos = await _db.Arquivos.ToListAsync();
+
+                if (listArquivos.Count > 0 && listArquivos.Any(a => a.Titulo == arquivo.Titulo && a.Id != arquivo.Id))
                 {
                     arquivo.MensagemRetorno = "Esse título já foi utilizado para outro cadastro.";
                     return arquivo;
