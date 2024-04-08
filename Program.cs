@@ -1,8 +1,12 @@
 using ApiMyArquivos.Core.Config;
 using ApiMyArquivos.Database;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("pt-BR");
+CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("pt-BR");
 
 ConfigRepository.ConfigurarRepositorys(builder.Services);
 var connectionString = builder.Configuration.GetConnectionString("ConexaoBanco");

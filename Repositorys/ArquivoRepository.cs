@@ -23,20 +23,18 @@ namespace ApiMyArquivos.Repositorys
 
                 var listArquivos = await _db.Arquivos.ToListAsync();
 
-                if (listArquivos.Count > 0 && listArquivos.Any(a => a.Titulo == arquivo.Titulo && a.Id != arquivo.Id))
+                if (_db.Arquivos.Any() && _db.Arquivos.Any(a => a.Titulo == arquivo.Titulo && a.Id != arquivo.Id))
                 {
                     arquivo.MensagemRetorno = "Esse título já foi utilizado para outro cadastro.";
                     return arquivo;
                 }
 
+                arquivo.DataCriacao = DateTime.Now;
+
                 _db.Arquivos.Add(arquivo);
                 await _db.SaveChangesAsync();
 
                 await _db.Database.CommitTransactionAsync();
-
-                //arquivo.Id = (GlobalVar.ListArquivo.Count() + 1);
-
-                //GlobalVar.ListArquivo.Add(arquivo);
 
                 return arquivo;
             }
@@ -53,28 +51,17 @@ namespace ApiMyArquivos.Repositorys
             {
                 _db.Database.BeginTransaction();
 
-                var listArquivos = await _db.Arquivos.ToListAsync();
-
-                if (listArquivos.Count > 0 && listArquivos.Any(a => a.Titulo == arquivo.Titulo && a.Id != arquivo.Id))
+                if (_db.Arquivos.Any() && _db.Arquivos.Any(a => a.Titulo == arquivo.Titulo && a.Id != arquivo.Id))
                 {
                     arquivo.MensagemRetorno = "Esse título já foi utilizado para outro cadastro.";
                     return arquivo;
                 }
 
                 _db.Arquivos.Update(arquivo);
-                await _db.SaveChangesAsync();
 
+                await _db.SaveChangesAsync();
                 await _db.Database.CommitTransactionAsync();
 
-                //if (GlobalVar.ListArquivo.Any(a => a.Titulo == arquivo.Titulo && a.Id != arquivo.Id) && GlobalVar.ListArquivo.Count > 0)
-                //{
-                //    arquivo.MensagemRetorno = "Esse título já foi utilizado para outro cadastro.";
-                //    return arquivo;
-                //}
-
-                //var obj = GlobalVar.ListArquivo.Where(w => w.Id == arquivo.Id).FirstOrDefault();
-                //GlobalVar.ListArquivo.Remove(obj);
-                //GlobalVar.ListArquivo.Add(arquivo);
                 return arquivo;
             }
             catch (Exception ex)
@@ -95,10 +82,6 @@ namespace ApiMyArquivos.Repositorys
                 await _db.Database.CommitTransactionAsync();
 
                 return result == 1;
-                //var obj = GlobalVar.ListArquivo.Where(w => w.Id == arquivoId).FirstOrDefault();
-                //GlobalVar.ListArquivo.Remove(obj);
-
-                //return true;
             }
             catch (Exception ex)
             {
@@ -110,36 +93,11 @@ namespace ApiMyArquivos.Repositorys
         public async Task<Arquivo> ObterArquivoPorId(int arquivoId)
         {
             return await _db.Arquivos.Where(w => w.Id == arquivoId).Select(s => s).FirstOrDefaultAsync();
-
-            //var arquivo = new Arquivo()
-            //{
-            //    Id = 1,
-            //    Titulo = "Teste Boy",
-            //    Descricao = "Apenas um testezinho",
-            //    DataCriacao = DateTime.Now,
-            //    NomeArquivo = "ahsim.txt"
-            //};
-
-            //return GlobalVar.ListArquivo.Where(w => w.Id == arquivoId).FirstOrDefault();
         }
 
         public async Task<List<Arquivo>> ObterTodosArquivos()
         {
             return await _db.Arquivos.ToListAsync();
-
-            //var listArquivos = new List<Arquivo>()
-            //{
-            //    new Arquivo()
-            //    {
-            //         Id = 1,
-            //         Titulo = "Teste Boy",
-            //         Descricao = "Apenas um testezinho",
-            //         DataCriacao = DateTime.Now,
-            //         NomeArquivo = "ahsim.txt",
-            //    }
-            //};
-
-            //return GlobalVar.ListArquivo.ToList();
         }
     }
 }
